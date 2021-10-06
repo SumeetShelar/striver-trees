@@ -1,16 +1,21 @@
 void childSumPropertyBT(Node* root) {
 	if(!root) return;
 	
-	if(root->left != NULL && root->right !=NULL) {
-		if((root->left->data + root->right->data) < root->data) {
-			if(root->left) root->left->data = root->data;
-			if(root->right) root->right->data = root->data;
-		}	
+	int child = 0;
+	if(root->left) child+= root->left->data;
+	if(root->right) child+= root->right->data;
+	
+	if(child >= root->data) root->data = child;
+	else {
+		if(root->left) root->left->data = root->data;
+		else if(root->right) root->right->data = root->data;
 	}
 	
-	if(root->left) childSumPropertyBT(root->left);
-	if(root->right) childSumPropertyBT(root->right);
-	if(root->left && root->right) root->data = root->left->data + root->right->data;
-	else if(root->left) root->data = root->left->data;
-	else if(root->right) root->data = root->right->data;
+	childSumPropertyBT(root->left);
+	childSumPropertyBT(root->right);
+	
+	int tot=0;
+	if(root->left) tot+= root->left->data;
+	if(root->right) tot+= root->right->data;
+	if(root->left || root->right) root->data = tot;
 }
